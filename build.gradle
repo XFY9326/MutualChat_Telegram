@@ -1,31 +1,92 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import groovy.transform.Field
+
 plugins {
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
-group 'XFY9326'
-version '0.4'
+version '0.5'
+@Field
+def mainPluginClass = "plugin.xfy9326.mutualchat.telegram.MainPlugin"
+@Field
+def authorName = "XFY9326"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+group 'plugin.XFY9326.mutualchat.telegram'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.telegram:telegrambots:4.1.2"
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "org.telegram:telegrambots:4.1.2"
 }
 
-shadowJar {
-    minimize()
-    mergeServiceFiles()
+def syncPluginVersion() {
+    println('Syncing plugin.yml ...')
+    File pluginConfig = new File('src/main/resources/plugin.yml')
+    if (!pluginConfig.exists()) {
+        pluginConfig.createNewFile()
+    }
+    if (pluginConfig.exists()) {
+        String data = pluginConfig.text
+        if (data.contains('author')) {
+            data = data.replaceAll('(author).*', "author: ${authorName}")
+        } else {
+            data = "author: ${authorName}\n${data}"
+        }
+
+        if (data.contains('version')) {
+            data = data.replaceAll('(version).*', "version: ${version.toString()}")
+        } else {
+            data = "version: ${version.toString()}\n${data}"
+        }
+
+        if (data.contains('name')) {
+            data = data.replaceAll('(name).*', "name: ${rootProject.name}")
+        } else {
+            data = "name: ${rootProject.name}\n${data}"
+        }
+
+        if (data.contains('main')) {
+            data = data.replaceAll('(main).*', "main: ${mainPluginClass}")
+        } else {
+            data = "main: ${mainPluginClass}\n${data}"
+        }
+        pluginConfig.write(data)
+    }
+}
+
+task testJar(type: ShadowJar) {
+    println('Making test resources ...')
+    from sourceSets.main.output
+    configurations = [project.configurations.compile]
+    classifier = 'test'
+    version = null
     dependencies {
         exclude('spigot-*.jar')
     }
 }
 
-task jarVersion(){
-    println("version: " + version)
+jar {
+    println('Packing jar ...')
+    syncPluginVersion()
+    manifest {
+        attributes 'Author': authorName
+        attributes 'Description': 'Minecraft Bukkit API Plugin'
+        attributes 'Version': version.toString()
+    }
+}
+
+shadowJar {
+    println('Making release resources ...')
+    classifier = 'with-dependencies'
+    mergeServiceFiles()
+    dependencies {
+        exclude('spigot-*.jar')
+    }
 }

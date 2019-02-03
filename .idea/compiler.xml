@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="MutualChat_Telegram.main" target="1.8" />
+      <module name="MutualChat_Telegram.test" target="1.8" />
+      <module name="XFY9326.MutualChat_Telegram.main" target="1.8" />
+      <module name="XFY9326.MutualChat_Telegram.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
