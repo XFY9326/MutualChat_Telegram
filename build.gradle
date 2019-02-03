@@ -1,0 +1,31 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'java'
+}
+
+group 'XFY9326'
+version '0.4'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.telegram:telegrambots:4.1.2"
+}
+
+shadowJar {
+    minimize()
+    mergeServiceFiles()
+    dependencies {
+        exclude('spigot-*.jar')
+    }
+}
+
+task jarVersion(){
+    println("version: " + version)
+}

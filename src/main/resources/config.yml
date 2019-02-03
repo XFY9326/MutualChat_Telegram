@@ -1,0 +1,81 @@
+# MutualChat_Telegram Config
+# If the config is outdated, you should update to the latest version!
+
+# Config version
+# Please don't change it!
+config_version: 4
+
+
+# Telegram settings
+telegram:
+  # The token of your telegram bot
+  # You can get this by asking @BotFather
+  # You must set this before use this plugin
+  token: "Null"
+
+  # The user name of your telegram bot
+  # You can get this by visit https://api.telegram.org/bot{Your_Token}/getMe
+  # You must set this before use this plugin
+  bot_user_name: "Null"
+
+  # The groups id your telegram bot joined
+  # You can get this by sending a msg in the group and then visit https://api.telegram.org/bot{Your_Token}/getUpdates to get the Group ID
+  # You must set this before use this plugin
+  chat_group_id:
+    - "0"
+
+  # Proxy settings
+  proxy:
+    # Telegram proxy host
+    host: "127.0.0.1"
+
+    # Telegram proxy port
+    port: 1080
+
+    # Telegram proxy type
+    # It can be NO_PROXY/HTTP/SOCKS4/SOCKS5
+    type: "NO_PROXY"
+
+
+# MutualChat settings
+MutualChat:
+  # Msg settings
+  msg:
+    # Show msg when player join and quit
+    # Default: true
+    player_join_and_quit: true
+
+    # The msg player talk show in telegram
+    # Using @p instead of player's name
+    # Using @msg instead of player's msg
+    # Default: [@p] @msg
+    telegram_show_msg: "[@p] @msg"
+
+    # The msg telegram talk show in game
+    # Using @p instead of player's name
+    # Using @msg instead of player's msg
+    # Default: [@p] @msg
+    game_show_msg: "<@p> @msg"
+
+    # The msg when player join game
+    # Using @p instead of player's name
+    # Using @address instead of player's internet address
+    # Default: @p joined game [@address]
+    player_join_msg: "@p joined game [@address]"
+
+    # The msg when player quit game
+    # Using @p instead of player's name
+    # Default: @p quit Game
+    player_quit_msg: "@p quit game"
+
+    # The msg when player use send position command
+    # Using @world instead of player's world
+    # Using @px instead of player's position x
+    # Using @py instead of player's position y
+    # Using @pz instead of player's position z
+    # Default: World:@world X:@px Y:@py Z:@pz
+    player_send_position_msg: "World:@world X:@px Y:@py Z:@pz"
+
+  # Send msg to server only when player online
+  # Default: false
+  send_msg_only_when_player_online: false
