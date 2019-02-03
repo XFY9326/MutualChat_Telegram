@@ -27,7 +27,6 @@ dependencies {
 }
 
 def syncPluginVersion() {
-    println('Syncing plugin.yml ...')
     File pluginConfig = new File('src/main/resources/plugin.yml')
     if (!pluginConfig.exists()) {
         pluginConfig.createNewFile()
@@ -62,7 +61,6 @@ def syncPluginVersion() {
 }
 
 task testJar(type: ShadowJar) {
-    println('Making test resources ...')
     from sourceSets.main.output
     configurations = [project.configurations.compile]
     classifier = 'test'
@@ -72,8 +70,11 @@ task testJar(type: ShadowJar) {
     }
 }
 
+task pureJar(type: ShadowJar) {
+    from sourceSets.main.output
+}
+
 jar {
-    println('Packing jar ...')
     syncPluginVersion()
     manifest {
         attributes 'Author': authorName
@@ -83,7 +84,6 @@ jar {
 }
 
 shadowJar {
-    println('Making release resources ...')
     classifier = 'with-dependencies'
     mergeServiceFiles()
     dependencies {
