@@ -1,7 +1,7 @@
 main: plugin.xfy9326.mutualchat.telegram.MainPlugin
 
 name: MutualChat_Telegram
-version: 0.5
+version: 0.6
 author: XFY9326
 description: Chat between Minecraft Server and Telegram
 website: https://www.xfy9326.top/?p=21

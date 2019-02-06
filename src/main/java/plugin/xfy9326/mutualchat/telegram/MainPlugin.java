@@ -164,16 +164,18 @@ public final class MainPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    private void sendMsgToBot(String player, String msg) {
+    private void sendMsgToBot(final String player, final String msg) {
         if (apiRegistered) {
             if (bot != null) {
-                if (player == null) {
-                    bot.sendMsg(msg, msg1 -> getLogger().info(msg1));
-                } else {
-                    bot.sendMsg(getConfig().getString(Config.MSG_TELEGRAM_SHOW, Config.DEFAULT_MSG_TELEGRAM_SHOW)
-                            .replace(Config.PLAYER, player)
-                            .replace(Config.MSG, msg), msg1 -> getLogger().info(msg1));
-                }
+                Bukkit.getScheduler().runTask(this, () -> {
+                    if (player == null) {
+                        bot.sendMsg(msg, msg1 -> getLogger().info(msg1));
+                    } else {
+                        bot.sendMsg(getConfig().getString(Config.MSG_TELEGRAM_SHOW, Config.DEFAULT_MSG_TELEGRAM_SHOW)
+                                .replace(Config.PLAYER, player)
+                                .replace(Config.MSG, msg), msg1 -> getLogger().info(msg1));
+                    }
+                });
             } else {
                 getLogger().warning("Bot Msg Send Error!");
             }

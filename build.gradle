@@ -6,7 +6,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
-version '0.5'
+version '0.6'
 @Field
 def mainPluginClass = "plugin.xfy9326.mutualchat.telegram.MainPlugin"
 @Field
