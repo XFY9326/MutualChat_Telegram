@@ -2,8 +2,17 @@ package plugin.xfy9326.mutualchat.telegram;
 
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
+import java.util.Locale;
+
 class Config {
     static final int MIN_CONFIG_VERSION = 3;
+
+    static final String LANG_CONFIG_ERROR = "config_error";
+    static final String LANG_CONFIG_OUTDATED = "config_outdated";
+    static final String LANG_BOT_UNREGISTERED = "bot_unregistered";
+    static final String LANG_BOT_MSG_SEND_ERROR = "bot_msg_send_error";
+    static final String LANG_ENTITY_ERROR = "entity_error";
+    static final String LANG_IGNORE_BOTSESSION_ERROR = "ignore_botsession_error";
 
     static final String PLAYER = "@p";
     static final String ADDRESS = "@address";
@@ -27,6 +36,7 @@ class Config {
     static final String MSG_GAME_SHOW = "MutualChat.msg.game_show_msg";
     static final String PLAYER_SEND_POSITION_MSG = "MutualChat.msg.player_send_position_msg";
     static final String CONFIG_VERSION = "config_version";
+    static final String I18N = "i18n";
 
     static final String SEND_MSG_ONLY_WHEN_PLAYER_ONLINE = "MutualChat.send_msg_only_when_player_online";
 
@@ -45,6 +55,27 @@ class Config {
     private static final String HTTP = "HTTP";
     private static final String SOCKS4 = "SOCK4";
     private static final String SOCKS5 = "SOCKS5";
+
+    private static final String LOCAL_DEFAULT = "default";
+    private static final String LOCAL_ZH = "zh";
+    private static final String LOCAL_EN = "en";
+
+    static Locale getLocale(String locale) {
+        if (locale == null) {
+            return Locale.getDefault();
+        } else {
+            switch (locale) {
+                case LOCAL_DEFAULT:
+                    return Locale.getDefault();
+                case LOCAL_ZH:
+                    return Locale.CHINESE;
+                case LOCAL_EN:
+                    return Locale.ENGLISH;
+                default:
+                    return Locale.getDefault();
+            }
+        }
+    }
 
     static DefaultBotOptions.ProxyType getProxyType(String type) {
         if (type == null) {

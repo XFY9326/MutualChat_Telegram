@@ -3,7 +3,12 @@
 
 # Config version
 # Please don't change it!
-config_version: 4
+config_version: 5
+
+# Language using in this plugin
+# Now support default/en/zh
+# Default: default
+i18n: "default"
 
 
 # Telegram settings

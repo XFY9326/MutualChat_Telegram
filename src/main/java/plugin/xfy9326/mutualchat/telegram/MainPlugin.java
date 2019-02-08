@@ -19,12 +19,14 @@ import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 
 public final class MainPlugin extends JavaPlugin implements Listener {
     private static final DecimalFormat decimalFormat = new DecimalFormat("#.00");
     private static boolean apiRegistered = false;
     private Bot bot = null;
     private BotSession botSession;
+    private I18n i18n;
 
     public MainPlugin() {
         saveDefaultConfig();
@@ -33,13 +35,14 @@ public final class MainPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onLoad() {
+        setI18n();
         if (!apiRegistered && checkConfigVersion()) {
             String token = getConfig().getString(Config.TELEGRAM_TOKEN);
             String botName = getConfig().getString(Config.TELEGRAM_BOT_NAME);
             List<String> chatId = getConfig().getStringList(Config.TELEGRAM_GROUP_CHAT_ID);
 
             if (token == null || botName == null || chatId == null || Config.NULL.equalsIgnoreCase(token) || Config.NULL.equalsIgnoreCase(botName)) {
-                getLogger().warning("Config Error!");
+                getLogger().warning(i18n.get(Config.LANG_CONFIG_ERROR));
             } else {
                 TelegramBotsApi botsApi = new TelegramBotsApi();
 
@@ -92,14 +95,14 @@ public final class MainPlugin extends JavaPlugin implements Listener {
         if (apiRegistered) {
             Bukkit.getPluginManager().registerEvents(this, this);
         } else {
-            getLogger().warning("The Bot is Unregistered!");
+            getLogger().warning(i18n.get(Config.LANG_BOT_UNREGISTERED));
         }
     }
 
     @Override
     public void onDisable() {
         if (apiRegistered && botSession != null) {
-            getLogger().info("You Can Ignore BOTSESSION Errors!");
+            getLogger().info(i18n.get(Config.LANG_IGNORE_BOTSESSION_ERROR));
             new Thread(() -> {
                 if (botSession.isRunning()) {
                     botSession.stop();
@@ -132,8 +135,8 @@ public final class MainPlugin extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (Config.COMMAND_SEND_POSITION.equals(command.getName())) {
-            if (sender instanceof Player) {
+        if (sender instanceof Player) {
+            if (Config.COMMAND_SEND_POSITION.equals(command.getName())) {
                 String x = decimalFormat.format(((Player) sender).getLocation().getX());
                 String y = decimalFormat.format(((Player) sender).getLocation().getY());
                 String z = decimalFormat.format(((Player) sender).getLocation().getZ());
@@ -146,11 +149,17 @@ public final class MainPlugin extends JavaPlugin implements Listener {
                 sendMsgToBot(((Player) sender).getDisplayName(), sendMsg);
                 sendMsgToServer(((Player) sender).getDisplayName(), sendMsg);
                 return true;
-            } else {
-                sender.sendMessage("Entity Error!");
             }
+        } else {
+            sender.sendMessage(i18n.get(Config.LANG_ENTITY_ERROR));
         }
         return false;
+    }
+
+    private void setI18n() {
+        String local = getConfig().getString(Config.I18N);
+        Locale locale = Config.getLocale(local);
+        i18n = new I18n(locale);
     }
 
     private void sendMsgToServer(String player, String msg) {
@@ -177,7 +186,7 @@ public final class MainPlugin extends JavaPlugin implements Listener {
                     }
                 });
             } else {
-                getLogger().warning("Bot Msg Send Error!");
+                getLogger().warning(i18n.get(Config.LANG_BOT_MSG_SEND_ERROR));
             }
         }
     }
@@ -185,7 +194,7 @@ public final class MainPlugin extends JavaPlugin implements Listener {
     private boolean checkConfigVersion() {
         int configVersion = getConfig().getInt(Config.CONFIG_VERSION, 0);
         if (configVersion < Config.MIN_CONFIG_VERSION) {
-            getLogger().warning("Config Outdated!");
+            getLogger().warning(i18n.get(Config.LANG_CONFIG_OUTDATED));
             return false;
         }
         return true;
